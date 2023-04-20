@@ -1,14 +1,17 @@
 
+from nltk.tokenize import WordPunctTokenizer
 import subprocess
-from transformers import pipeline
-import re
+from transformers import AutoTokenizer, AutoModelWithLMHead, SummarizationPipeline
 import nltk
-from nltk.corpus import stopwords
-nltk.download('words')
+nltk.download('punkt')
 
-stop_words = set(stopwords.words('english'))
-summarizer = pipeline("summarization")
-words = set(nltk.corpus.words.words())
+pipeline = SummarizationPipeline(
+    model=AutoModelWithLMHead.from_pretrained(
+        "SEBIS/code_trans_t5_base_commit_generation_multitask"),
+    tokenizer=AutoTokenizer.from_pretrained(
+        "SEBIS/code_trans_t5_base_commit_generation_multitask", skip_special_tokens=True)
+)
+
 
 def is_git_repo() -> bool:
     try:
@@ -46,25 +49,9 @@ def get_diff(diff_per_file: bool) -> str:
 
 
 def get_commit_message(prompt: str, language: str = "english", max_tokens=10) -> str:
-    # prompt = f"What follows '-------' is a git diff for a potential commit. Reply with an appropriate git commit message(a Git commit message should be concise but also try to describe the important changes in the commit) and don't include any other text but the message in your response. ------- {prompt}, language={language}"
-    # m = generator(prompt, max_new_tokens=max_tokens, num_return_sequences=1)
-    # print(m)
-    # return "Hello World"
-    # prompt = ''.join(filter(whitelist.__contains__, prompt))
-    prompt = re.sub('[^a-zA-Z]+', ' ', prompt)
-    prompt = ' '.join(w for w in nltk.wordpunct_tokenize(prompt) if w.lower() in words or not w.isalpha())
-    prompt = ' '.join(w for w in nltk.wordpunct_tokenize(prompt) if not w.lower() in stop_words)
-    s = ' '.join(w for w in nltk.wordpunct_tokenize(
-        prompt) if len(w) > 1 or w == 'i' or w == 'a' or w == 'I' or w == 'A')
-    l = s.split()
-    k = []
-    for i in l:
+    tokenized_list = WordPunctTokenizer().tokenize(prompt)
+    message = ' '.join(tokenized_list)
+    message = pipeline([message])[0]['summary_text']
 
-        # If condition is used to store unique string
-        # in another list 'k'
-        if (s.count(i) >= 1 and (i not in k)):
-            k.append(i)
-    prompt = ' '.join(k)
-    print(prompt)
-    m = summarizer(prompt, max_length=max_tokens, min_length=3, do_sample=False)
-    return m[0]['summary_text']
+    # Testing commit messages using GPT
+    return message
