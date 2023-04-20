@@ -13,7 +13,7 @@ def gpt_commit():
     diff_per_file = False
     commit_conventional = False
     commit_language = "en"
-    commit_tokens = 75
+    commit_tokens = 15
 
     # Check for flags
     if len(sys.argv) > 1:

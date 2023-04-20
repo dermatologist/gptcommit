@@ -2,10 +2,13 @@
 import subprocess
 from transformers import pipeline
 import re
+import nltk
+from nltk.corpus import stopwords
+nltk.download('words')
 
+stop_words = set(stopwords.words('english'))
 summarizer = pipeline("summarization")
-
-whitelist = set('abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+words = set(nltk.corpus.words.words())
 
 def is_git_repo() -> bool:
     try:
@@ -49,6 +52,19 @@ def get_commit_message(prompt: str, language: str = "english", max_tokens=10) ->
     # return "Hello World"
     # prompt = ''.join(filter(whitelist.__contains__, prompt))
     prompt = re.sub('[^a-zA-Z]+', ' ', prompt)
+    prompt = ' '.join(w for w in nltk.wordpunct_tokenize(prompt) if w.lower() in words or not w.isalpha())
+    prompt = ' '.join(w for w in nltk.wordpunct_tokenize(prompt) if not w.lower() in stop_words)
+    s = ' '.join(w for w in nltk.wordpunct_tokenize(
+        prompt) if len(w) > 1 or w == 'i' or w == 'a' or w == 'I' or w == 'A')
+    l = s.split()
+    k = []
+    for i in l:
+
+        # If condition is used to store unique string
+        # in another list 'k'
+        if (s.count(i) >= 1 and (i not in k)):
+            k.append(i)
+    prompt = ' '.join(k)
     print(prompt)
-    m = summarizer(prompt, max_length=100, min_length=10, do_sample=False)
-    return m
+    m = summarizer(prompt, max_length=max_tokens, min_length=3, do_sample=False)
+    return m[0]['summary_text']
