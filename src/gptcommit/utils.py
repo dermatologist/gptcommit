@@ -1,13 +1,10 @@
 
 import subprocess
-# get transformers
-from transformers import TFGPT2LMHeadModel, GPT2Tokenizer
+from transformers import pipeline
 import re
 
-# get large GPT2 tokenizer and GPT2 model
-tokenizer = GPT2Tokenizer.from_pretrained("gpt2-large")
-GPT2 = TFGPT2LMHeadModel.from_pretrained(
-    "gpt2-large", pad_token_id=tokenizer.eos_token_id)
+summarizer = pipeline("summarization")
+
 whitelist = set('abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ')
 
 def is_git_repo() -> bool:
@@ -53,7 +50,5 @@ def get_commit_message(prompt: str, language: str = "english", max_tokens=10) ->
     # prompt = ''.join(filter(whitelist.__contains__, prompt))
     prompt = re.sub('[^a-zA-Z]+', ' ', prompt)
     print(prompt)
-    input_ids = tokenizer.encode(prompt, return_tensors='tf')
-    greedy_output = GPT2.generate(input_ids, max_length=max_tokens, num_return_sequences=1)
-    m = tokenizer.decode(greedy_output[0], skip_special_tokens=True)
+    m = summarizer(prompt, max_length=100, min_length=10, do_sample=False)
     return m
