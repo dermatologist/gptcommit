@@ -11,7 +11,7 @@ def gpt_commit():
 
 
     diff_per_file = False
-    commit_conventional = False
+    commit_conventional = True
     commit_language = "en"
     commit_tokens = 15
 
