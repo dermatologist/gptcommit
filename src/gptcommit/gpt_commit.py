@@ -19,7 +19,7 @@ def gpt_commit():
     if len(sys.argv) > 1:
         if "--help" in sys.argv:
             print(
-                "Usage: python git_ai_commit.py [--diff-per-file] [--conventional] [--language <language>] [--choice <choice>]\n"
+                "Usage: python gpt_commit.py [--diff-per-file] [--conventional] [--language <language>] [--choice <choice>]\n"
             )
             print("Flags:")
             print("  --diff-per-file     Generate commit message per changed file")
