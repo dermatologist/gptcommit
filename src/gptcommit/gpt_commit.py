@@ -9,7 +9,6 @@ import inquirer
 def gpt_commit():
     utils.is_git_repo()
 
-
     diff_per_file = False
     commit_conventional = True
     commit_language = "en"
