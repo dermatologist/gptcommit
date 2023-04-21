@@ -73,13 +73,18 @@ def gpt_commit():
             "test",
             "chore",
         ]
-        questions = [
+        commit_type = inquirer.prompt(
+        [
             inquirer.List(
                 "conventional_choice",
                 message="What type of change are you making?",
                 choices=conventional_choices,
             )
         ]
+        )
+
+    if commit_type:
+        selected_message = f"{commit_type['conventional_choice']}: {selected_message}"
 
     print(f"Commit Message:\n{selected_message}")
 
