@@ -4,7 +4,11 @@ import sys
 import utils
 import inquirer
 
+from gptcommit import __version__
 
+__author__ = "Bell Eapen"
+__copyright__ = "Bell Eapen"
+__license__ = "MIT"
 
 def gpt_commit():
     utils.is_git_repo()
