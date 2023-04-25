@@ -1,17 +1,18 @@
 import os
 import subprocess
 import sys
-import utils
+from .utils import is_git_repo, get_diff, get_commit_message
 import inquirer
 
 from gptcommit import __version__
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 __author__ = "Bell Eapen"
 __copyright__ = "Bell Eapen"
 __license__ = "MIT"
 
 def gpt_commit():
-    utils.is_git_repo()
+    is_git_repo()
 
     diff_per_file = False
     commit_conventional = True
@@ -51,7 +52,7 @@ def gpt_commit():
             tokens_index = flags.index("--tokens")
             commit_tokens = int(flags[tokens_index + 1])
 
-    diff = utils.get_diff(diff_per_file)
+    diff = get_diff(diff_per_file)
 
     if not diff:
         print(
@@ -65,7 +66,7 @@ def gpt_commit():
             "The diff is too large to write a commit message for. Please split your changes into multiple commits."
         )
         sys.exit(1)
-    selected_message = utils.get_commit_message(diff, commit_language, commit_tokens)
+    selected_message = get_commit_message(diff, commit_language, commit_tokens)
 
     if commit_conventional:
         conventional_choices = [
