@@ -5,8 +5,6 @@ from .utils import is_git_repo, get_diff, get_commit_message
 import inquirer
 
 from gptcommit import __version__
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-
 
 def gpt_commit():
     is_git_repo()
