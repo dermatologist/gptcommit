@@ -6,6 +6,8 @@ import inquirer
 
 from gptcommit import __version__
 
+os.environ['PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION'] = 'python'
+
 def gpt_commit():
     is_git_repo()
 
