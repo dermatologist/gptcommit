@@ -7,9 +7,6 @@ import inquirer
 from gptcommit import __version__
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-__author__ = "Bell Eapen"
-__copyright__ = "Bell Eapen"
-__license__ = "MIT"
 
 def gpt_commit():
     is_git_repo()
