@@ -67,7 +67,7 @@ nvidia-cusparse-cu11==11.7.4.91
     # via torch
 nvidia-nccl-cu11==2.14.3
     # via torch
-nvidia-nvtx-cu11==11.7.91
+nvidia-nvtx-cu11==11.8.86
     # via torch
 packaging==23.1
     # via
