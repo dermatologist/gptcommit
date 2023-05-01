@@ -59,7 +59,7 @@ nvidia-cudnn-cu11==8.5.0.96
     # via torch
 nvidia-cufft-cu11==10.9.0.58
     # via torch
-nvidia-curand-cu11==10.2.10.91
+nvidia-curand-cu11==10.3.0.86
     # via torch
 nvidia-cusolver-cu11==11.4.0.1
     # via torch
